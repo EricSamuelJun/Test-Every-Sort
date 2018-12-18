@@ -3,30 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Diagnostics;
 namespace quicksorter
 {
     class Program
     {
         static void Main(string[] args)
         {
-            List<int> mlist = new List<int>();
-            mlist.Add(14);
-            mlist.Add(18);
-            mlist.Add(7);
-            mlist.Add(8);
-            mlist.Add(20);
-            mlist.Add(6);
-            mlist.Add(11);
-            mlist.Add(15);
-            mlist.Add(09);
-            mlist.Add(17);
-            mlist.Add(22);
-            mlist.Add(0);
+            Sorter mySorter = new Sorter();
+            mySorter.AddRandom(20);
+            mySorter.BubbleSort();
         }
     }
     public class Sorter
     {
+        private Stopwatch stopwatch = new Stopwatch();
+        public string countingtime {
+            get { return stopwatch.ElapsedMilliseconds.ToString() + "ms"; }
+        }
         private int turn;
         private List<int> mydata = new List<int>();
         /// <summary>
@@ -35,9 +29,6 @@ namespace quicksorter
         public int count {
             get {
                 return mydata.Count;
-            }
-            private set {
-
             }
         }
         /// <summary>
@@ -48,13 +39,48 @@ namespace quicksorter
             Console.Write("{0} Turn: [ ",turn);
             mydata.ForEach(i => Console.Write("{0}\t", i));
             Console.WriteLine("] ");
+            if (!stopwatch.IsRunning && turn!=0) {
+                Console.WriteLine("Stopwatch time: " + countingtime);
+            }
+        }
+        public void AddRandom(int mcount) {
+            Random randomer = new Random();
+            for(int i =0; i<mcount; i++) {
+                mydata.Add(randomer.Next(0,mcount));
+            }
+            
+        }
+        public void AddAscend(int mcount,int min=0) {
+            mydata.Clear();
+            for(int i=min;i<mcount; i++) {
+                mydata.Add(i);
+            }
+        }
+        public void AddDescend(int mcount,int min =0) {
+            mydata.Clear();
+            for (int i = min; i < mcount; i++) {
+                mydata.Add(mcount-i);
+            }
+        }
+        public void Add(int a) {
+            mydata.Add(a);
+        }
+        public void Clear() {
+            this.mydata.Clear();
+        }
+        public int this[int i] {
+            get { return mydata[i]; }
+            set { this.mydata[i] = value; }
         }
         /// <summary>
         /// Quick Sort Every Elements in list
         /// </summary>
         public void QuickSort(){
             turn = 0;
+            stopwatch.Reset();
+            stopwatch.Start();
             QuickSort(0, mydata.Count - 1);
+            stopwatch.Stop();
         }
         private void QuickSort(int lpivot,int rpivot){
             turn++;
@@ -78,6 +104,7 @@ namespace quicksorter
             mydata[mlpivot] = copylist[lpivot];
             mlpivot -= 1;
             mrpivot += 1;
+            Show();
             if (!(mlpivot-lpivot < 1))
             {
                 QuickSort(lpivot, mlpivot);
@@ -88,19 +115,63 @@ namespace quicksorter
             }
             return;
         }
-
+        /// <summary>
+        /// Merge Sort With Reculsive Method
+        /// </summary>
         public void MergeSort() {
             turn = 0;
+            stopwatch.Reset();
+            stopwatch.Start();
             MergeSort(0, mydata.Count - 1);
+            stopwatch.Stop();
         }
         private void MergeSort(int lpivot, int rpivot){
             
         }
+        /// <summary>
+        /// Do Bubble Sort
+        /// </summary>
         public void BubbleSort() {
+            turn = 0;
+            stopwatch.Reset();
+            stopwatch.Start();
 
+            stopwatch.Stop();
         }
+        /// <summary>
+        /// 
+        /// </summary>
         public void InsertSort() {
+            turn = 0;
+            stopwatch.Reset();
+            stopwatch.Start();
+            for (int i=1; i<count; i++) {
+                turn++;
+                int temp = this[i];
+                for (int j = i; j >= 0; j--) {
+                    if(temp < this[j]) {
+                        this[i] = this[j];
+                        this[j] = temp;
+                    }
+                }
+                Show();
+            }
+            stopwatch.Stop();
+        }
 
+        public void SelectSort() {
+            turn=0;
+            stopwatch.Reset();
+            stopwatch.Start();
+
+            stopwatch.Stop();
+        }
+        public void HeapSort() {
+            turn = 0;
+            stopwatch.Reset();
+            stopwatch.Start();
+
+            stopwatch.Stop();
         }
     }
 }
