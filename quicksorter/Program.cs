@@ -23,25 +23,42 @@ namespace quicksorter
             mlist.Add(17);
             mlist.Add(22);
             mlist.Add(0);
-            Console.Write("[ ");
-            mlist.ForEach(i => Console.Write("{0}\t", i));
-            Console.WriteLine("] ");
-            Sorter.QuickSort(ref mlist, 0, mlist.Count-1);
-            Console.Write("[ ");
-            mlist.ForEach(i => Console.Write("{0}\t", i));
-            Console.WriteLine("] ");
         }
     }
     public class Sorter
     {
-        public static void QuickSort(ref List<int> list)
-        {
-            QuickSort(ref list, 0, list.Count - 1);
+        private int turn;
+        private List<int> mydata = new List<int>();
+        /// <summary>
+        /// mydata의 count 값 리턴함
+        /// </summary>
+        public int count {
+            get {
+                return mydata.Count;
+            }
+            private set {
+
+            }
         }
-        public static void QuickSort(ref List<int> list,int lpivot,int rpivot)
-        {
-            
-            List<int> copylist = new List<int>(list);
+        /// <summary>
+        /// Show All List Value in Data
+        /// </summary>
+        public void Show() {
+
+            Console.Write("{0} Turn: [ ",turn);
+            mydata.ForEach(i => Console.Write("{0}\t", i));
+            Console.WriteLine("] ");
+        }
+        /// <summary>
+        /// Quick Sort Every Elements in list
+        /// </summary>
+        public void QuickSort(){
+            turn = 0;
+            QuickSort(0, mydata.Count - 1);
+        }
+        private void QuickSort(int lpivot,int rpivot){
+            turn++;
+            List<int> copylist = new List<int>(mydata);
             int mlpivot = lpivot;
             int mrpivot = rpivot;
             for(int i =lpivot+1; i <= rpivot; i++)
@@ -49,35 +66,41 @@ namespace quicksorter
                 //Console.WriteLine("lpviot: " + lpivot + " mlpivot: " + mlpivot + " copy[index]: " + copylist[lpivot] + " i: " + i + " copylist[i]: " + copylist[i] + "rpviot: " + rpivot + " mrpivot: " + mrpivot);
                 if (copylist[lpivot] < copylist[i])
                 {//피봇보다 더 크다면
-                    list[mrpivot] = copylist[i];
+                    mydata[mrpivot] = copylist[i];
                     mrpivot--;
                 }
                 else
                 {
-                    list[mlpivot] = copylist[i];
+                    mydata[mlpivot] = copylist[i];
                     mlpivot++;
                 }
             }
-            list[mlpivot] = copylist[lpivot];
+            mydata[mlpivot] = copylist[lpivot];
             mlpivot -= 1;
             mrpivot += 1;
-            //list.ForEach(i => Console.Write("{0}\t", i));
-            //Console.WriteLine();
-            //Console.WriteLine("*****All Clean\t[ mlpivot / lpivot: {0}/{1} \t mrpivot / rpivot {2}/{3} ]",mlpivot,lpivot,mrpivot,rpivot);
-            //Console.ReadKey(true);
             if (!(mlpivot-lpivot < 1))
             {
-                QuickSort(ref list, lpivot, mlpivot);
+                QuickSort(lpivot, mlpivot);
             }
             if (!(rpivot - mrpivot < 1))
             {
-                QuickSort(ref list, mrpivot, rpivot);
+                QuickSort(mrpivot, rpivot);
             }
             return;
         }
-        public static void MergeSort(ref List<int> list, int lpivot, int rpivot)
-        {
+
+        public void MergeSort() {
+            turn = 0;
+            MergeSort(0, mydata.Count - 1);
+        }
+        private void MergeSort(int lpivot, int rpivot){
             
+        }
+        public void BubbleSort() {
+
+        }
+        public void InsertSort() {
+
         }
     }
 }
