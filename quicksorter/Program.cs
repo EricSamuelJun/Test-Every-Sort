@@ -10,9 +10,12 @@ namespace quicksorter
     {
         static void Main(string[] args)
         {
+            Console.SetWindowSize(180, 30);
             Sorter mySorter = new Sorter();
             mySorter.AddRandom(20);
+            mySorter.Show();
             mySorter.BubbleSort();
+            
         }
     }
     public class Sorter
@@ -34,19 +37,23 @@ namespace quicksorter
         /// <summary>
         /// Show All List Value in Data
         /// </summary>
-        public void Show() {
-
+        public void Show(bool showtime = false) {
+            
             Console.Write("{0} Turn: [ ",turn);
-            mydata.ForEach(i => Console.Write("{0}\t", i));
+            mydata.ForEach(i => {
+                Console.Write("{0}\t", i);
+                });
             Console.WriteLine("] ");
-            if (!stopwatch.IsRunning && turn!=0) {
+            if (!stopwatch.IsRunning && showtime==true) {
                 Console.WriteLine("Stopwatch time: " + countingtime);
             }
         }
         public void AddRandom(int mcount) {
+            int temp = 0;
             Random randomer = new Random();
             for(int i =0; i<mcount; i++) {
-                mydata.Add(randomer.Next(0,mcount));
+                temp = randomer.Next(0, mcount);
+                this.mydata.Add(temp);
             }
             
         }
@@ -81,6 +88,7 @@ namespace quicksorter
             stopwatch.Start();
             QuickSort(0, mydata.Count - 1);
             stopwatch.Stop();
+            Show(true);
         }
         private void QuickSort(int lpivot,int rpivot){
             turn++;
@@ -124,6 +132,7 @@ namespace quicksorter
             stopwatch.Start();
             MergeSort(0, mydata.Count - 1);
             stopwatch.Stop();
+            Show(true);
         }
         private void MergeSort(int lpivot, int rpivot){
             
@@ -132,11 +141,23 @@ namespace quicksorter
         /// Do Bubble Sort
         /// </summary>
         public void BubbleSort() {
+            int temp = 0;
             turn = 0;
             stopwatch.Reset();
             stopwatch.Start();
-
+            for(int i = this.count-1;i>0;i--) {
+                for(int j=0; j<i; j++) {
+                    if (this[i] < this[j + 1]) {
+                        turn++;
+                        temp = this[j];
+                        this[j] = this[j + 1];
+                        this[j + 1] = temp;
+                    }
+                }
+                Show();
+            }
             stopwatch.Stop();
+            Show(true);
         }
         /// <summary>
         /// 
@@ -157,6 +178,7 @@ namespace quicksorter
                 Show();
             }
             stopwatch.Stop();
+            Show(true);
         }
 
         public void SelectSort() {
@@ -164,14 +186,25 @@ namespace quicksorter
             stopwatch.Reset();
             stopwatch.Start();
 
+
+
+
+
             stopwatch.Stop();
+            Show(true);
         }
         public void HeapSort() {
             turn = 0;
             stopwatch.Reset();
             stopwatch.Start();
 
+
+
+
+
+
             stopwatch.Stop();
+            Show(true);
         }
     }
 }
