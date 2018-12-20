@@ -14,7 +14,7 @@ namespace quicksorter
             Sorter mySorter = new Sorter();
             mySorter.AddRandom(20);
             mySorter.Show();
-            mySorter.BubbleSort();
+            mySorter.InsertSort();
             
         }
     }
@@ -72,12 +72,60 @@ namespace quicksorter
         public void Add(int a) {
             mydata.Add(a);
         }
+        public void AddPreCreated(int mod=0) {
+            if (mod ==0) {
+                this.Add(7);
+                this.Add(0);
+                this.Add(10);
+                this.Add(11);
+                this.Add(1);
+                this.Add(6);
+                this.Add(12);
+                this.Add(9);
+                this.Add(15);
+                this.Add(19);
+                this.Add(2);
+                this.Add(8);
+            }
+            else if(mod == 1) {
+                this.Add(10);
+                this.Add(7);
+                this.Add(11);
+                this.Add(4);
+                this.Add(19);
+                this.Add(3);
+                this.Add(2);
+                this.Add(9);
+                this.Add(6);
+                this.Add(11);
+                this.Add(2);
+                this.Add(5);
+                this.Add(3);
+                this.Add(16);
+                this.Add(9);
+                this.Add(16);
+                this.Add(11);
+                this.Add(7);
+                this.Add(9);
+                this.Add(12);
+            }
+        }
         public void Clear() {
             this.mydata.Clear();
         }
         public int this[int i] {
             get { return mydata[i]; }
             set { this.mydata[i] = value; }
+        }
+        public static Sorter operator+(Sorter m, int a) {
+            m.Add(a);
+            return m;
+        }
+        public static Sorter operator+(Sorter m, Sorter b) {
+            foreach (int i in b.mydata) {
+                m.Add(i);
+            }
+            return m;
         }
         /// <summary>
         /// Quick Sort Every Elements in list
@@ -145,16 +193,17 @@ namespace quicksorter
             turn = 0;
             stopwatch.Reset();
             stopwatch.Start();
-            for(int i = this.count-1;i>0;i--) {
-                for(int j=0; j<i; j++) {
-                    if (this[i] < this[j + 1]) {
-                        turn++;
-                        temp = this[j];
-                        this[j] = this[j + 1];
-                        this[j + 1] = temp;
+            for (int i = this.count - 1; i >= 0; i--) {
+                turn++;
+                for (int j = 0; j < i; j++) {
+                    Console.WriteLine("\n [{0}, {1}, {2}] ", j, this[j], i);
+                    if (this[j + 1] < this[j]) {
+                        temp = this[j + 1];
+                        this[j + 1] = this[j];
+                        this[j] = temp;
                     }
+                    Show();
                 }
-                Show();
             }
             stopwatch.Stop();
             Show(true);
@@ -168,14 +217,19 @@ namespace quicksorter
             stopwatch.Start();
             for (int i=1; i<count; i++) {
                 turn++;
-                int temp = this[i];
-                for (int j = i; j >= 0; j--) {
-                    if(temp < this[j]) {
-                        this[i] = this[j];
-                        this[j] = temp;
+                if (this[i] < this[i - 1]) {
+                    for (int j = i - 1; j >= 0; j--) {
+                        if (this[i] > this[j] ) {
+                            mydata.Insert(j+1, mydata[i]);
+                            mydata.RemoveAt(i+1);
+                            break;
+                        } else if(this[i]<=this[j] && j == 0) {
+                            mydata.Insert(j, mydata[i]);
+                            mydata.RemoveAt(i + 1);
+                            break;
+                        }
                     }
                 }
-                Show();
             }
             stopwatch.Stop();
             Show(true);
