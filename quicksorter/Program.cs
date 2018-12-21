@@ -12,9 +12,9 @@ namespace quicksorter
         {
             Console.SetWindowSize(180, 30);
             Sorter mySorter = new Sorter();
-            mySorter.AddRandom(20);
+            mySorter.AddRandom(9);
             mySorter.Show();
-            mySorter.SelectSort();
+            mySorter.BogoSort();
             
         }
     }
@@ -22,11 +22,15 @@ namespace quicksorter
     {
         public bool isSorted {
             get {
-                mydata.ForEach(i =>
-               {
-                   Console.Write("AAA");
-               });
-                return false;
+                bool temp = false;
+                for(int i =1; i<mydata.Count; i++) {
+                    if(mydata[i-1] <= mydata[i]) {
+                        temp = true;
+                    } else {
+                        return false;
+                    }
+                }
+                return temp;
             }
         }
         private Stopwatch stopwatch = new Stopwatch();
@@ -47,7 +51,6 @@ namespace quicksorter
         /// Show All List Value in Data
         /// </summary>
         public void Show(bool showtime = false) {
-            
             Console.Write("{0} Turn: [ ",turn);
             mydata.ForEach(i => {
                 Console.Write("{0}\t", i);
@@ -283,20 +286,16 @@ namespace quicksorter
             stopwatch.Stop();
             Show(true);
         }
-
         public void SelectSort() {
             turn=0;
             stopwatch.Reset();
             stopwatch.Start();
-
             List<int> mylist = new List<int>(mydata);
             for(int i =0; i<mydata.Count; i++) {
+                turn++;
                 mydata[i] = mylist.Min<int>();
                 mylist.Remove(mydata[i]);
             }
-
-
-
             stopwatch.Stop();
             Show(true);
         }
@@ -305,6 +304,43 @@ namespace quicksorter
             stopwatch.Reset();
             stopwatch.Start();
 
+
+
+
+
+
+            stopwatch.Stop();
+            Show(true);
+        }
+        public void BogoSort() {
+            turn = 0;
+            stopwatch.Reset();
+            stopwatch.Start();
+            List<int> mylist = new List<int>(mydata);
+            Random rand = new Random();
+            int temp = 0;
+            if(mydata.Count == 1) {
+                stopwatch.Stop();
+                Show(true);
+                return;
+            }
+            while (!isSorted) {
+                turn++;
+                LinkedList<int> mynumlist = new LinkedList<int>();
+                for(int i =0; i<mydata.Count; i++) {
+                    label:
+                    temp = rand.Next(0, mydata.Count);
+                    if (mynumlist.Find(temp) == null) {
+                        mynumlist.AddLast(temp);
+                    } else {
+                        goto label;
+                    }
+                }
+                for (int i = 0; i < mydata.Count; i++) {
+                    mydata[i] = mylist[mynumlist.First.Value];
+                    mynumlist.RemoveFirst();
+                }
+            }
 
 
 
