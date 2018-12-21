@@ -14,12 +14,21 @@ namespace quicksorter
             Sorter mySorter = new Sorter();
             mySorter.AddRandom(20);
             mySorter.Show();
-            mySorter.MergeSort();
+            mySorter.SelectSort();
             
         }
     }
     public class Sorter
     {
+        public bool isSorted {
+            get {
+                mydata.ForEach(i =>
+               {
+                   Console.Write("AAA");
+               });
+                return false;
+            }
+        }
         private Stopwatch stopwatch = new Stopwatch();
         public string countingtime {
             get { return stopwatch.ElapsedMilliseconds.ToString() + "ms"; }
@@ -185,7 +194,6 @@ namespace quicksorter
         private void MergeSort(int lpivot, int rpivot){
             if(lpivot < rpivot) {
                 int mid = (lpivot + rpivot) / 2;
-                Console.WriteLine("lpivot: {0}, rpivot: {1} and mid: {2}",lpivot,rpivot,mid);
                 MergeSort(lpivot, mid);
                 MergeSort(mid + 1, rpivot);
                 Merge(lpivot, mid, rpivot);
@@ -204,55 +212,28 @@ namespace quicksorter
             for (int i = midpivot+1; i <= rpivot; i++) {
                 rightlist.Add(mydata[i]);
             }
-
-            #region show
-            Console.Write("leftlist [ ", turn);
-            leftlist.ForEach(i => {
-                Console.Write("{0}\t", i);
-            });
-            Console.Write("]\t\t");
-
-            Console.Write("rightlist [ ", turn);
-            rightlist.ForEach(i => {
-                Console.Write("{0}\t", i);
-            });
-            Console.WriteLine("] ");
-            #endregion
+            
 
             //그 다음 lpivot 부터 하나씩 작은거부터 넣으면 됨
-            for (int j = lpivot; j < rpivot; j++) {
-                int llistidx = 0;
-                int rlistidx = 0;
-                Console.WriteLine("Compare idx {0} val {1}, with idx {2} val{3}", llistidx, leftlist[llistidx], rlistidx, rightlist[rlistidx]);
-                if (leftlist[llistidx] < rightlist[rlistidx]) {
+            int llistidx = 0;
+            int rlistidx = 0;
+            int lmax = leftlist.Count-1;
+            int rmax = rightlist.Count-1;
+            for (int j = lpivot; j <=rpivot; j++) {
+                if(llistidx> lmax ) {
+                    mydata[j] = rightlist[rlistidx];
+                    rlistidx++;
+                } else if (rlistidx > rmax) {
                     mydata[j] = leftlist[llistidx];
-                    Console.WriteLine("{0} to idx{1}",leftlist[llistidx],j);
+                    llistidx++;
+                } else if (leftlist[llistidx] < rightlist[rlistidx]) {
+                    mydata[j] = leftlist[llistidx];
                     llistidx++;
                 } else {
                     mydata[j] = rightlist[rlistidx];
-                    Console.WriteLine("{0} to idx{1}", rightlist[rlistidx], j);
                     rlistidx++;
                 }
-                Console.WriteLine("left idx   " + llistidx + "          left count         " + leftlist.Count + "       right idx       " + rlistidx + "         right count    " + rightlist.Count);
-                Show();
-                if (rlistidx >= rightlist.Count) {
-                    Console.WriteLine("right listidx{0} is bigger than rlist count{1} ",rlistidx,rightlist.Count);
-                    
-                    while (llistidx < leftlist.Count) {
-                        mydata[j] = leftlist[llistidx];
-                        llistidx++;
-                        j++;
-                    }
-                } else if (llistidx >= leftlist.Count) {
-                    Console.WriteLine("left listidx{0} is bigger than llist count{1} ", llistidx, leftlist.Count);
-                    while (rlistidx < rightlist.Count) {
-                        mydata[j] = rightlist[rlistidx];
-                        rlistidx++;
-                        j++;
-                    }
-                }
             }
-
         }
         /// <summary>
         /// Do Bubble Sort
@@ -265,7 +246,6 @@ namespace quicksorter
             for (int i = this.count - 1; i >= 0; i--) {
                 turn++;
                 for (int j = 0; j < i; j++) {
-                    Console.WriteLine("\n [{0}, {1}, {2}] ", j, this[j], i);
                     if (this[j + 1] < this[j]) {
                         temp = this[j + 1];
                         this[j + 1] = this[j];
@@ -309,7 +289,11 @@ namespace quicksorter
             stopwatch.Reset();
             stopwatch.Start();
 
-
+            List<int> mylist = new List<int>(mydata);
+            for(int i =0; i<mydata.Count; i++) {
+                mydata[i] = mylist.Min<int>();
+                mylist.Remove(mydata[i]);
+            }
 
 
 
